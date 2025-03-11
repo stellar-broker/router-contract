@@ -1,0 +1,9 @@
+.idea
+
+.env
+.soroban
+.stellar
+target
+*/target
+test_snapshots
+bindings
