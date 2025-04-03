@@ -151,17 +151,16 @@ impl StellarBroker {
             //deduct fee from the execution result
             bought = bought.checked_sub(fee).unwrap();
             //determine fee asset from fee path
-            let fee_asset = get_buying_asset(&fpath);
-            if fee_asset.is_none() || fee_asset.unwrap() == buying {
+            let fee_asset = get_buying_asset(&fpath).unwrap_or_else(|| buying.clone());
+            if fee_asset == buying {
                 //swap buying asset equals ref fee asset - deduct the fee from the balance variable
                 buying_after = -fee;
                 received_fee = fee;
             } else {
                 //convert charged fee to ref fee tokens
-                let fee_asset = get_buying_asset(&fpath);
                 received_fee = swap_fee(&e, &buying, fee, fpath, &broker);
                 //adjust balance variable in case if selling asset equals ref fee asset
-                if fee_asset.unwrap() == selling {
+                if fee_asset == selling {
                     selling_after = -received_fee;
                 }
             }
