@@ -28,7 +28,7 @@ impl StellarBroker {
     // Panics if the contract is already initialized
     pub fn init(e: Env, admin: Address) {
         if e.is_initialized() {
-            e.panic_with_error(BrokerError::AlreadyInitialized);
+            e.panic_with_error(BrokerError::Unauthorized);
         }
         admin.require_auth();
         e.set_admin(&admin);
@@ -47,9 +47,6 @@ impl StellarBroker {
     // Panics if the contract is not initialized
     // Panics if the caller is not the admin
     pub fn enable_protocol(e: Env, protocol: Protocol, enabled: bool) {
-        if !e.is_initialized() {
-            e.panic_with_error(BrokerError::NotInitialized);
-        }
         e.panic_if_not_admin();
         e.set_protocol_enabled(&protocol, enabled);
     }
@@ -65,9 +62,6 @@ impl StellarBroker {
     // Panics if the contract is not initialized
     // Panics if the caller is not the admin
     pub fn update_contract(e: Env, wasm_hash: BytesN<32>) {
-        if !e.is_initialized() {
-            e.panic_with_error(BrokerError::NotInitialized);
-        }
         e.panic_if_not_admin();
         e.deployer().update_current_contract_wasm(wasm_hash)
     }
