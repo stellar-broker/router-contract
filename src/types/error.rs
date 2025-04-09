@@ -7,10 +7,6 @@ use soroban_sdk::contracterror;
 pub enum BrokerError {
     // Caller is not allowed to execute this function
     Unauthorized = 32_700,
-    // Contract has not been initialized yet
-    NotInitialized = 32_701,
-    // Cannot initialize the contract for the second time
-    AlreadyInitialized = 32_702,
     // Protocol participating in the swap has been disabled
     ProtocolDisabled = 32_710,
     // Malformed swap route path
