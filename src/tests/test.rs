@@ -1,10 +1,9 @@
 extern crate std;
 use crate::adapters::soroswap::calc_soroswap_amount_out;
 use crate::{
-    tests::{
-        mock_aqua_pool_contract::{MockAquaPoolContract, MockAquaPoolContractClient},
-        mock_soroswap_pair_contract::{MockSoroswapPairContract, MockSoroswapPairContractClient},
-    },
+    tests::mock_aqua_pool_contract::{MockAquaPoolContract, MockAquaPoolContractClient},
+    tests::mock_soroswap_pair_contract::{MockSoroswapPairContract, MockSoroswapPairContractClient},
+    tests::malicious_lp_contract::{MaliciousLPContract, MaliciousLPContractClient},
     types::{protocol::Protocol, route::Route, step::PathStep},
     StellarBroker, StellarBrokerClient,
 };
@@ -133,7 +132,6 @@ fn strict_send_test() {
     assert_eq!(usdc_client.balance(&trader), 9000000000i128);
 
     //reverse swap
-
     let eurc_usdc_swaps = Vec::from_array(
         &env,
         [Route {
@@ -182,6 +180,87 @@ fn strict_send_test() {
     assert_eq!(usdc_client.balance(&trader), 9844484716i128);
 
     broker_client.withdraw(&Address::generate(&env), &usdc, &contract_fees_balance);
+}
+
+#[test]
+#[should_panic(expected = "32713")]
+fn steal_intermediate_asset() {
+    let env = Env::default();
+
+    env.mock_all_auths();
+
+    let issuer = Address::generate(&env);
+    let usdc = fake_asset(&env, &issuer);
+    let eurc = fake_asset(&env, &issuer);
+    let xlm = fake_asset(&env, &issuer);
+
+    let usdc_asset_client = StellarAssetClient::new(&env, &usdc);
+    let eurc_asset_client = StellarAssetClient::new(&env, &eurc);
+    let xlm_asset_client = StellarAssetClient::new(&env, &xlm);
+
+    //init broker
+    let admin = Address::generate(&env);
+    let broker_address = env.register(StellarBroker, ());
+    let broker_client = StellarBrokerClient::new(&env, &broker_address);
+    broker_client.init(&admin, &usdc);
+    let broker_accumulated_usdc_fees = amount(1000000) as i128;
+    usdc_asset_client.mint(&broker_address, &broker_accumulated_usdc_fees);
+
+    //enable protocols
+    broker_client.enable_protocol(&Protocol::Comet, &true);
+
+    //init fake contract
+    let lp_address = env.register(MaliciousLPContract, ());
+    let lp_client = MaliciousLPContractClient::new(&env, &lp_address);
+    // final asset is EURC, and the amount to steal is the accumulated USDC fees
+    lp_client.init(&eurc, &broker_accumulated_usdc_fees);
+    // fund the fake contract with 1 EURC
+    // this token will be sent to the broker as the final swap result
+    eurc_asset_client.mint(&lp_address, &1);
+
+    //init client address
+    let trader = Address::generate(&env);
+    //fund it
+    xlm_asset_client.mint(&trader, &1);
+
+    // 1 XLM -> USDC -> EURC
+    let xlm_eurc_swaps = Vec::from_array(
+        &env,
+        [Route {
+            amount: 1i128,
+            min: 0,
+            estimated: 0,
+            path: Vec::from_array(
+                &env,
+                [
+                    PathStep {
+                        protocol: Protocol::Comet,
+                        asset: usdc.clone(),
+                        pool: lp_address.clone(),
+                        si: 0,
+                        bi: 0,
+                    },
+                    PathStep {
+                        protocol: Protocol::Comet,
+                        asset: eurc.clone(),
+                        pool: lp_address.clone(),
+                        si: 0,
+                        bi: 0,
+                    },
+                ],
+            ),
+        }],
+    );
+
+    // execute swap
+    broker_client.swap(
+        &xlm,
+        &xlm_eurc_swaps,
+        &trader,
+        &0,
+        &0,
+        &Vec::from_array(&env, []),
+    );
 }
 
 #[test]
