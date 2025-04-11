@@ -1,8 +1,8 @@
 use soroban_sdk::{contract, contractclient, Address, Env};
 
-use crate::{extensions::auth_helper::add_transfer_auth, types::swapinfo::LPSwap};
-
 use super::adapter::AdapterTrait;
+use crate::auth::add_transfer_auth;
+use crate::types::swapinfo::LPSwap;
 
 #[contractclient(name = "PhoenixPoolClient")]
 #[allow(dead_code)]

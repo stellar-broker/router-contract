@@ -55,7 +55,7 @@ fn strict_send_test() {
     let admin = Address::generate(&env);
     let broker_address = env.register(StellarBroker, ());
     let broker_client = StellarBrokerClient::new(&env, &broker_address);
-    broker_client.init(&admin);
+    broker_client.init(&admin, &usdc);
 
     //enable protocols
     broker_client.enable_protocol(&Protocol::AquaConstant, &true);

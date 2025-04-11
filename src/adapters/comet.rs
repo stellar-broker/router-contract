@@ -1,8 +1,8 @@
 use soroban_sdk::{contract, contractclient, Address, Env};
 
-use crate::{extensions::auth_helper::add_approve_auth, types::swapinfo::LPSwap};
-
 use super::adapter::AdapterTrait;
+use crate::auth::add_approve_auth;
+use crate::types::swapinfo::LPSwap;
 
 #[contractclient(name = "CometPoolClient")]
 #[allow(dead_code)]

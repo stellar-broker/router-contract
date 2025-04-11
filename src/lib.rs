@@ -1,16 +1,14 @@
 #![no_std]
 
 mod adapters;
-mod extensions;
+mod auth;
+mod storage;
 mod tests;
 mod types;
 
 use adapters::adapter::swap_adapter;
-use extensions::env_extensions::EnvExtensions;
 use soroban_sdk::{contract, contractimpl, panic_with_error, token, Address, BytesN, Env, Vec};
-use types::{
-    error::BrokerError, protocol::Protocol, route::Route, step::PathStep, swapinfo::LPSwap,
-};
+use types::{error, protocol, route::Route, step::PathStep, swapinfo::LPSwap};
 
 #[contract]
 pub struct StellarBroker;
@@ -22,17 +20,17 @@ impl StellarBroker {
     // # Arguments
     //
     // * `admin` - Admin account address
+    // * `fee_token` - Fee token address
     //
     // # Panics
     //
     // Panics if the contract is already initialized
-    pub fn init(e: Env, admin: Address) {
-        if e.is_initialized() {
-            e.panic_with_error(BrokerError::Unauthorized);
-        }
+    pub fn init(e: Env, admin: Address, fee_token: Address) {
         admin.require_auth();
-        e.set_admin(&admin);
-        e.bump_instance();
+        // Write settings
+        storage::init_settings(&e, &admin, &fee_token);
+        // Extend TTL
+        storage::bump_instance(&e, 1);
     }
 
     // Enable/disable specific LP protocol
@@ -46,9 +44,9 @@ impl StellarBroker {
     //
     // Panics if the contract is not initialized
     // Panics if the caller is not the admin
-    pub fn enable_protocol(e: Env, protocol: Protocol, enabled: bool) {
-        e.panic_if_not_admin();
-        e.set_protocol_enabled(&protocol, enabled);
+    pub fn enable_protocol(e: Env, protocol: protocol::Protocol, enabled: bool) {
+        auth::require_admin(&e);
+        storage::set_protocol_enabled(&e, &protocol, enabled);
     }
 
     // Update the contract's WASM hash
@@ -62,7 +60,7 @@ impl StellarBroker {
     // Panics if the contract is not initialized
     // Panics if the caller is not the admin
     pub fn update_contract(e: Env, wasm_hash: BytesN<32>) {
-        e.panic_if_not_admin();
+        auth::require_admin(&e);
         e.deployer().update_current_contract_wasm(wasm_hash)
     }
 
@@ -98,8 +96,8 @@ impl StellarBroker {
     ) -> Vec<i128> {
         //require authentication
         trader.require_auth();
-        //bump TTL
-        e.bump_instance();
+        //bump only if TTL < 5 days
+        storage::bump_instance(&e, 5);
 
         let broker = e.current_contract_address();
         //estimated bought amount
@@ -108,12 +106,15 @@ impl StellarBroker {
         let mut bought: i128 = 0;
 
         //retrieve buying asset, planned amount to sell, and min amount to receive
-        let buying = get_buying_asset(&routes.first_unchecked().path).unwrap();
+        let buying = get_buying_asset(&e, &routes);
+        let fee_token = storage::get_fee_token(&e).unwrap();
         let (selling_amount, min_buying_amount) = estimate_routes(&routes);
 
         //init token clients for sold/bought tokens
         let selling_token_client = token::Client::new(&e, &selling);
         let buying_token_client = token::Client::new(&e, &buying);
+        let fee_token_client = token::Client::new(&e, &fee_token);
+        let fee_balance_before = fee_token_client.balance(&broker);
 
         //transfer selling asset to contract address to avoid missing trustline errors for the trader
         selling_token_client.transfer(&trader, &broker, &selling_amount);
@@ -134,8 +135,8 @@ impl StellarBroker {
         //calculate trader profit based on estimated
         let profit = calc_profit(estimated, bought);
 
-        let mut selling_after = 0i128;
-        let mut buying_after = 0i128;
+        let mut selling_balance_after = 0i128;
+        let mut buying_balance_after = 0i128;
         let mut received_fee = 0i128;
 
         //charged fee = profit fee + fixed fee
@@ -144,33 +145,49 @@ impl StellarBroker {
         if fee > 0 {
             //deduct fee from the execution result
             bought = bought.checked_sub(fee).unwrap();
-            //determine fee asset from fee path
-            let fee_asset = get_buying_asset(&fpath).unwrap_or_else(|| buying.clone());
-            if fee_asset == buying {
-                //swap buying asset equals ref fee asset - deduct the fee from the balance variable
-                buying_after = -fee;
+            if fee_token == buying {
                 received_fee = fee;
+                //swap buying asset equals ref fee asset - deduct the fee from the balance variable
+                buying_balance_after = -fee;
             } else {
                 //convert charged fee to ref fee tokens
                 received_fee = swap_fee(&e, &buying, fee, fpath, &broker);
                 //adjust balance variable in case if selling asset equals ref fee asset
-                if fee_asset == selling {
-                    selling_after = -received_fee;
+                if fee_token == selling {
+                    selling_balance_after = -received_fee;
                 }
             }
         }
-        //verify that actual sold and bought amounts are within expected range
-        selling_after = selling_after
+
+        //verify that exactly selling_amount of tokens were deducted from the balance
+        selling_balance_after = selling_balance_after
             .checked_add(selling_token_client.balance(&broker))
             .unwrap();
-        buying_after = buying_after
+        let actual_sold = selling_balance_before.checked_sub(selling_balance_after);
+        if actual_sold.unwrap() != selling_amount {
+            panic_with_error!(e, error::BrokerError::Misconduct);
+        }
+
+        //verify that received at least min_buying_amount of tokens after the swap
+        buying_balance_after = buying_balance_after
             .checked_add(buying_token_client.balance(&broker))
             .unwrap();
-        verify_sold(&e, selling_balance_before, selling_after, selling_amount);
-        verify_bought(&e, buying_balance_before, buying_after, min_buying_amount);
+        let actual_bought = buying_balance_after.checked_sub(buying_balance_before);
+        if actual_bought.unwrap() < min_buying_amount {
+            panic_with_error!(e, error::BrokerError::Unfeasible);
+        }
 
         //transfer bought tokens minus fee to the trader account
         buying_token_client.transfer(&broker, &trader, &bought);
+
+        //verify that fee token balance is correct
+        let actual_fee = fee_token_client
+            .balance(&broker)
+            .checked_sub(fee_balance_before)
+            .unwrap();
+        if actual_fee != received_fee || actual_fee < 0 {
+            panic_with_error!(e, error::BrokerError::Misconduct);
+        }
 
         //return result as array
         Vec::from_array(&e, [selling_amount, bought, received_fee])
@@ -189,9 +206,9 @@ impl StellarBroker {
     // Panics if the caller is not admin
     pub fn withdraw(e: Env, dest: Address, token: Address, amount: i128) {
         //check admin auth
-        e.panic_if_not_admin();
-        //extend TTL
-        e.bump_instance();
+        auth::require_admin(&e);
+        //extend TTL if less than 10 days TTL left
+        storage::bump_instance(&e, 10);
         //transfer tokens from the contract balance
         let token_client = token::Client::new(&e, &token);
         token_client.transfer(&e.current_contract_address(), &dest, &amount);
@@ -274,27 +291,29 @@ fn estimate_routes(routes: &Vec<Route>) -> (i128, i128) {
     (total_selling, min_buying)
 }
 
-// Retrieve last asset from the path - buying asset
-fn get_buying_asset(path: &Vec<PathStep>) -> Option<Address> {
-    let last_step = path.last();
-    if last_step.is_none() {
-        return None;
+// Retrieve last token address from the path (buying token address)
+fn get_buying_asset(e: &Env, routes: &Vec<Route>) -> Address {
+    let mut asset: Option<Address> = None;
+    //check every route
+    for route in routes.iter() {
+        let last_step = route.path.last();
+        if last_step.is_none() {
+            //zero length path
+            panic_with_error!(&e, error::BrokerError::Unfeasible);
+        }
+        //retrieve the asset
+        let route_asset = Some(last_step.unwrap().asset.clone());
+        //assign the token variable
+        if asset.is_none() {
+            asset = route_asset;
+        } else if route_asset != asset {
+            //each route should have the same buying token
+            panic_with_error!(&e, error::BrokerError::Unfeasible);
+        }
     }
-    Some(last_step.unwrap().asset.clone())
-}
-
-// Verify that actually sold amount exactly equals planned amount
-fn verify_sold(e: &Env, before: i128, after: i128, plan_sold: i128) {
-    let sold = before.checked_sub(after);
-    if sold.is_none() || sold.unwrap() != plan_sold {
-        panic_with_error!(e, BrokerError::Unfeasible);
+    //at least one is required
+    if asset.is_none() {
+        panic_with_error!(&e, error::BrokerError::Unfeasible);
     }
-}
-
-// Verify that actually bought amount is greater or equal minimal planned amount
-fn verify_bought(e: &Env, before: i128, after: i128, min_bought: i128) {
-    let bought = after.checked_sub(before);
-    if bought.is_none() || bought.unwrap() < min_bought {
-        panic_with_error!(e, BrokerError::Unfeasible);
-    }
+    asset.unwrap()
 }

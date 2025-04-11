@@ -1,6 +1,4 @@
-use soroban_sdk::{
-    contract, contractclient, panic_with_error, token::TokenClient, Address, Env, Error,
-};
+use soroban_sdk::{contract, contractclient, panic_with_error, token, Address, Env, Error};
 
 use super::adapter::AdapterTrait;
 use crate::types::{error::BrokerError, swapinfo::LPSwap};
@@ -17,7 +15,7 @@ pub struct SoroswapAdapter;
 
 impl AdapterTrait for SoroswapAdapter {
     fn swap(&self, e: &Env, si: LPSwap) -> i128 {
-        let token_client = TokenClient::new(e, &si.in_token);
+        let token_client = token::TokenClient::new(e, &si.in_token);
         token_client.transfer(&si.to, &si.step.pool, &si.amount);
 
         let swap_client = SoroswapClient::new(e, &si.step.pool);
