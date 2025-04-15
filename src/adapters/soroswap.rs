@@ -19,9 +19,9 @@ impl AdapterTrait for SoroswapAdapter {
         token_client.transfer(&si.to, &si.step.pool, &si.amount);
 
         let swap_client = SoroswapClient::new(e, &si.step.pool);
-        let reserves = &swap_client.get_reserves();
+        let reserves = swap_client.get_reserves();
 
-        let amount_out = calc_soroswap_amount_out(si.amount, reserves, si.step.bi == 0);
+        let amount_out = calc_soroswap_amount_out(si.amount, &reserves, si.step.bi == 0);
 
         if si.step.bi == 1 {
             swap_client.swap(&0, &amount_out, &si.to);
