@@ -132,8 +132,12 @@ impl StellarBroker {
             estimated = estimated.checked_add(route.estimated).unwrap();
         }
 
+        if bought < min_buying_amount {
+            panic_with_error!(e, error::BrokerError::Unfeasible);
+        }
+
         //calculate trader profit based on estimated
-        let profit = calc_profit(estimated, bought);
+        let profit = calc_profit(estimated, min_buying_amount, bought);
 
         let mut selling_balance_after = 0i128;
         let mut buying_balance_after = 0i128;
@@ -241,9 +245,10 @@ fn perform_route_swap(e: &Env, swap: &Route, selling: &Address, to: &Address) ->
 }
 
 // Calculate variable fee based on the difference between actual and estimated swap amounts
-fn calc_profit(estimated: i128, actual: i128) -> i128 {
+fn calc_profit(estimated: i128, min: i128, actual: i128) -> i128 {
     //calculate the difference
-    let difference = actual.checked_sub(estimated);
+    let from = if min > estimated { min } else { estimated };
+    let difference = actual.checked_sub(from);
     //no variable fee charge if no profit
     if difference.is_none() || difference.unwrap() <= 0 {
         return 0;
