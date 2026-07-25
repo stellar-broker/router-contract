@@ -3,7 +3,29 @@ use soroban_sdk::{
     contract, contractimpl, panic_with_error, token::TokenClient, Address, Env, Error, Vec, U256,
 };
 
-use soroban_fixed_point_math::SorobanFixedPoint;
+// floor(x * y / denominator), computed via U256 to avoid u128 phantom overflow.
+// Mirrors soroban_fixed_point_math::SorobanFixedPoint::fixed_mul_floor, which is
+// unavailable on soroban-sdk 26.x (the crate is pinned to soroban-sdk 25.x).
+fn fixed_mul_floor(env: &Env, x: u128, y: u128, denominator: u128) -> u128 {
+    let product = U256::from_u128(env, x).mul(&U256::from_u128(env, y));
+    product
+        .div(&U256::from_u128(env, denominator))
+        .to_u128()
+        .unwrap()
+}
+
+// ceil(x * y / denominator); mirrors SorobanFixedPoint::fixed_mul_ceil.
+fn fixed_mul_ceil(env: &Env, x: u128, y: u128, denominator: u128) -> u128 {
+    let denom = U256::from_u128(env, denominator);
+    let product = U256::from_u128(env, x).mul(&U256::from_u128(env, y));
+    let quotient = product.div(&denom);
+    let remainder = product.rem_euclid(&denom);
+    if remainder > U256::from_u128(env, 0) {
+        quotient.add(&U256::from_u128(env, 1)).to_u128().unwrap()
+    } else {
+        quotient.to_u128().unwrap()
+    }
+}
 
 // Returns the amount out for a given input amount
 //
@@ -24,20 +46,21 @@ pub fn get_aqua_amount_out(
     fee: i128,
     fee_multiplier: i128,
 ) -> i128 {
-    let result = (amount_in as u128).fixed_mul_floor(
+    let result = fixed_mul_floor(
         env,
-        &(reserves.1 as u128),
-        &((reserves.0 + amount_in) as u128),
+        amount_in as u128,
+        reserves.1 as u128,
+        (reserves.0 + amount_in) as u128,
     );
-    let fee = result.fixed_mul_ceil(&env, &(fee as u128), &(fee_multiplier as u128));
+    let fee = fixed_mul_ceil(&env, result, fee as u128, fee_multiplier as u128);
     (result - fee) as i128
 }
 
 #[contract]
 pub struct MockAquaPoolContract;
 
-const FEE: u128 = 30;
-const FEE_MULTIPLIER: u128 = 10_000;
+pub const FEE: u128 = 30;
+pub const FEE_MULTIPLIER: u128 = 10_000;
 
 #[contractimpl]
 impl MockAquaPoolContract {

@@ -4,3 +4,5 @@ pub mod aqua_stable;
 pub mod soroswap;
 pub mod comet;
 pub mod phoenix;
+pub mod aqua_concentrated;
+pub mod sushiswap;

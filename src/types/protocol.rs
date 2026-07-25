@@ -10,4 +10,6 @@ pub enum Protocol {
     Soroswap = 2,
     Comet = 3,
     Phoenix = 4,
+    AquaConcentrated = 5,
+    Sushiswap = 6,
 }
