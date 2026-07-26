@@ -9,6 +9,7 @@ Supported protocols:
 - [SoroSwap](https://soroswap.finance)
 - [Comet](https://github.com/CometDEX/comet-contracts-v1)
 - [Phoenix](https://www.phoenix-hub.io)
+- [SushiSwap](https://www.sushi.com/)
 
 ## Contract compilation
 
@@ -22,6 +23,12 @@ Supported protocols:
 
 Checkout this repository, navigate to the repo root directory, and run build command:
 
-```
+```shell
 stellar contract build
+```
+
+### Generate JS bindings
+
+```shell
+stellar contract bindings typescript --wasm target\wasm32v1-none\release\stellarbroker.wasm --overwrite --output-dir bindings/
 ```
