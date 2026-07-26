@@ -59,8 +59,8 @@ pub fn get_aqua_amount_out(
 #[contract]
 pub struct MockAquaPoolContract;
 
-pub const FEE: u128 = 30;
-pub const FEE_MULTIPLIER: u128 = 10_000;
+const FEE: u128 = 30;
+const FEE_MULTIPLIER: u128 = 10_000;
 
 #[contractimpl]
 impl MockAquaPoolContract {

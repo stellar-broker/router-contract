@@ -4,6 +4,7 @@ use crate::{
     tests::mock_soroswap_pair_contract::{
         MockSoroswapPairContract, MockSoroswapPairContractClient,
     },
+    tests::mock_sushiswap_pool_contract::{MockSushiPoolContract, MockSushiPoolContractClient},
     types::{protocol::Protocol, step::PathStep},
     StellarBroker, StellarBrokerClient,
 };
@@ -27,6 +28,7 @@ pub struct StrictSendTestContext<'a> {
     pub usdc_xlm_pool: Address,
     pub usdc_eurc_pool: Address,
     pub xlm_eurc_pool: Address,
+    pub usdc_xlm_sushi_pool: Address,
     pub broker: Address,
     pub broker_client: StellarBrokerClient<'a>,
     pub trader: Address,
@@ -46,6 +48,19 @@ impl StrictSendTestContext<'_> {
     pub fn check_no_interim_leftovers(&self) {
         assert_eq!(self.get_token_client(&self.eurc).balance(&self.broker), 0);
         assert_eq!(self.get_token_client(&self.xlm).balance(&self.broker), 0);
+    }
+
+    // Checks the [sold, bought, fee] tuple returned by `swap`
+    pub fn check_result(
+        &self,
+        result: Vec<i128>,
+        expected_sold: i128,
+        expected_bought: i128,
+        expected_fee: i128,
+    ) {
+        assert_eq!(result.get(0).unwrap(), expected_sold);
+        assert_eq!(result.get(1).unwrap(), expected_bought);
+        assert_eq!(result.get(2).unwrap(), expected_fee);
     }
 
     pub fn fund_trader(&self, asset: &Address, amount: i128) {
@@ -86,6 +101,13 @@ impl StrictSendTestContext<'_> {
             } else {
                 bi = 1;
             }
+        } else if pool == &self.usdc_xlm_sushi_pool {
+            protocol = Protocol::Sushiswap;
+            if buying == self.usdc {
+                si = 1;
+            } else {
+                bi = 1;
+            }
         } else {
             panic!("Unknown pool")
         }
@@ -96,6 +118,20 @@ impl StrictSendTestContext<'_> {
             si,
             bi,
         }
+    }
+
+    // Same as `step`, but overrides the inferred protocol tag. Useful for pools whose swap ABI is
+    // shared across protocols — e.g. routing the constant-product `usdc_xlm_pool` as
+    // `AquaConcentrated`, which the concentrated adapter drives through the identical `swap` call.
+    pub fn step_with_protocol(
+        &self,
+        pool: &Address,
+        buying: Address,
+        protocol: Protocol,
+    ) -> PathStep {
+        let mut step = self.step(pool, buying);
+        step.protocol = protocol;
+        step
     }
 
     pub fn path<const N: usize>(&self, steps: [PathStep; N]) -> Vec<PathStep> {
@@ -174,6 +210,13 @@ pub fn setup() -> StrictSendTestContext<'static> {
     xlm_asset_client.mint(&xlm_eurc_pool, &(amount(12000000)));
     eurc_asset_client.mint(&xlm_eurc_pool, &(amount(1000000)));
 
+    //init sushiswap pool (token0 = usdc, token1 = xlm), funded both ways so it can swap either direction
+    let usdc_xlm_sushi_pool = env.register(MockSushiPoolContract, ());
+    let usdc_xlm_sushi_pool_client = MockSushiPoolContractClient::new(&env, &usdc_xlm_sushi_pool);
+    usdc_xlm_sushi_pool_client.init(&usdc, &xlm);
+    usdc_asset_client.mint(&usdc_xlm_sushi_pool, &(amount(1000000)));
+    xlm_asset_client.mint(&usdc_xlm_sushi_pool, &(amount(1000000)));
+
     //init broker
     let admin = Address::generate(&env);
     let broker = env.register(StellarBroker, ());
@@ -201,6 +244,7 @@ pub fn setup() -> StrictSendTestContext<'static> {
         usdc_xlm_pool,
         usdc_eurc_pool,
         xlm_eurc_pool,
+        usdc_xlm_sushi_pool,
         broker,
         broker_client,
         trader,

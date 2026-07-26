@@ -23,7 +23,7 @@ fn swap_usdc_eurc() {
         }],
     );
 
-    ctx.broker_client.swap(
+    let result = ctx.broker_client.swap(
         &ctx.usdc,
         &swaps,
         &ctx.trader,
@@ -34,11 +34,11 @@ fn swap_usdc_eurc() {
             ctx.step(&ctx.usdc_xlm_pool, ctx.usdc.clone()),
         ]),
     );
-
     ctx.check_contract_fee_balance(32826388);
     ctx.check_trader_balance(&ctx.eurc, 800679106);
     ctx.check_trader_balance(&ctx.usdc, 0);
     ctx.check_no_interim_leftovers();
+    ctx.check_result(result, amount(100), 800679106, 32826388);
     ctx.withdraw_fees();
 }
 
@@ -60,13 +60,14 @@ fn swap_eurc_usdc() {
         }],
     );
 
-    ctx.broker_client
+    let result = ctx
+        .broker_client
         .swap(&ctx.eurc, &swaps, &ctx.trader, &300, &0, &ctx.path([]));
-
     ctx.check_contract_fee_balance(16790041);
     ctx.check_trader_balance(&ctx.eurc, amount(45));
     ctx.check_trader_balance(&ctx.usdc, 639176764);
     ctx.check_no_interim_leftovers();
+    ctx.check_result(result, amount(55), 639176764, 16790041);
     ctx.withdraw_fees();
 }
 
@@ -88,7 +89,7 @@ fn swap_xlm_eurc() {
         }],
     );
 
-    ctx.broker_client.swap(
+    let result = ctx.broker_client.swap(
         &ctx.xlm,
         &swaps,
         &ctx.trader,
@@ -96,11 +97,11 @@ fn swap_xlm_eurc() {
         &0,
         &ctx.path([ctx.step(&ctx.usdc_eurc_pool, ctx.usdc.clone())]),
     );
-
     ctx.check_contract_fee_balance(1665767);
     ctx.check_trader_balance(&ctx.xlm, amount(270));
     ctx.check_trader_balance(&ctx.eurc, 603248700);
     ctx.check_no_interim_leftovers();
+    ctx.check_result(result, amount(730), 603248700, 1665767);
     ctx.withdraw_fees();
 }
 
@@ -123,7 +124,7 @@ fn swap_no_fees() {
         }],
     );
 
-    ctx.broker_client.swap(
+    let result = ctx.broker_client.swap(
         &ctx.xlm,
         &swaps,
         &ctx.trader,
@@ -131,11 +132,11 @@ fn swap_no_fees() {
         &0,
         &ctx.path([ctx.step(&ctx.usdc_eurc_pool, ctx.usdc.clone())]),
     );
-
     ctx.check_contract_fee_balance(0);
     ctx.check_trader_balance(&ctx.xlm, amount(270));
     ctx.check_trader_balance(&ctx.eurc, 604641000);
     ctx.check_no_interim_leftovers();
+    ctx.check_result(result, amount(730), 604641000, 0);
     ctx.withdraw_fees();
 }
 
