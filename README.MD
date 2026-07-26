@@ -32,3 +32,21 @@ stellar contract build
 ```shell
 stellar contract bindings typescript --wasm target\wasm32v1-none\release\stellarbroker.wasm --overwrite --output-dir bindings/
 ```
+
+## Initialization
+
+After deployment, run `init()` and then enable each protocol: 
+
+```shell
+# init, provide admin account address and USDC contract address for fee token
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- init --admin <ADMIN_G...> --fee_token <FEE_TOKEN_C...>
+
+# enable protocols
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol AquaConstant --enabled true
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol AquaStable --enabled true
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol Soroswap --enabled true
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol Comet --enabled true
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol Phoenix --enabled true
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol AquaConcentrated --enabled true
+stellar contract invoke --id <DEPLOYED_ADDRESS> --source <admin> --network mainnet -- enable_protocol --protocol Sushiswap --enabled true
+```
