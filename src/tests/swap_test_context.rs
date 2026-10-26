@@ -11,7 +11,7 @@ use crate::{
 use soroban_sdk::{
     testutils::Address as _,
     token::{StellarAssetClient, TokenClient},
-    Address, Env, Vec,
+    Address, Bytes, Env, Vec,
 };
 
 pub struct StrictSendTestContext<'a> {
@@ -117,6 +117,7 @@ impl StrictSendTestContext<'_> {
             pool: pool.clone(),
             si,
             bi,
+            ext: Bytes::new(&self.env),
         }
     }
 

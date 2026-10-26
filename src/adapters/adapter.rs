@@ -1,4 +1,4 @@
-use super::{aqua_constant, aqua_stable, comet, phoenix, soroswap, aqua_concentrated, sushiswap};
+use super::{aqua_constant, aqua_stable, comet, phoenix, soroswap, aqua_concentrated, sushiswap, axis};
 use crate::storage;
 use crate::types::{error::BrokerError, protocol::Protocol, swapinfo::LPSwap};
 use soroban_sdk::{panic_with_error, Env};
@@ -23,6 +23,7 @@ pub fn swap_adapter(e: &Env, protocol: Protocol, si: LPSwap) -> i128 {
         Protocol::Comet => comet::CometAdapter.swap(e, si),
         Protocol::Phoenix => phoenix::PhoenixAdapter.swap(e, si),
         Protocol::AquaConcentrated => aqua_concentrated::AquaConcentratedAdapter.swap(e, si),
-        Protocol::Sushiswap => sushiswap::SushiswapAdapter.swap(e, si)
+        Protocol::Sushiswap => sushiswap::SushiswapAdapter.swap(e, si),
+        Protocol::Axis => axis::AxisAdapter.swap(e, si)
     }
 }

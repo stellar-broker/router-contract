@@ -5,7 +5,7 @@ use crate::{
     types::{protocol::Protocol, route::Route, step::PathStep},
     StellarBroker, StellarBrokerClient,
 };
-use soroban_sdk::{testutils::Address as _, token::StellarAssetClient, Address, Env, Vec};
+use soroban_sdk::{testutils::Address as _, token::StellarAssetClient, Address, Bytes, Env, Vec};
 
 #[test]
 #[should_panic(expected = "32713")]
@@ -64,6 +64,7 @@ fn attempt_intermediate_asset_fee_drain() {
                         pool: lp_address.clone(),
                         si: 0,
                         bi: 0,
+                        ext: Bytes::new(&env),
                     },
                     PathStep {
                         protocol: Protocol::Comet,
@@ -71,6 +72,7 @@ fn attempt_intermediate_asset_fee_drain() {
                         pool: lp_address.clone(),
                         si: 0,
                         bi: 0,
+                        ext: Bytes::new(&env),
                     },
                 ],
             ),

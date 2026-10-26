@@ -12,4 +12,5 @@ pub enum Protocol {
     Phoenix = 4,
     AquaConcentrated = 5,
     Sushiswap = 6,
+    Axis = 7,
 }

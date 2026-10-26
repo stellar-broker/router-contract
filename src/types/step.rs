@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address};
+use soroban_sdk::{contracttype, Address, Bytes};
 
 use super::protocol::Protocol;
 
@@ -15,4 +15,6 @@ pub struct PathStep {
     pub si: u32,
     // Buying asset index
     pub bi: u32,
+    // Protocol-specific parameters, XDR-encoded ScVal decoded by the adapter (empty for protocols without parameters)
+    pub ext: Bytes,
 }

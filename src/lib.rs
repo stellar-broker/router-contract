@@ -7,7 +7,7 @@ mod tests;
 mod types;
 
 use adapters::adapter::swap_adapter;
-use soroban_sdk::{contract, contractimpl, panic_with_error, token, Address, BytesN, Env, Vec};
+use soroban_sdk::{contract, contractimpl, panic_with_error, token, Address, BytesN, ContractExecutable, Env, Vec};
 use types::{error, protocol, route::Route, step::PathStep, swapinfo::LPSwap};
 
 #[contract]
@@ -61,7 +61,7 @@ impl StellarBroker {
     // Panics if the caller is not the admin
     pub fn update_contract(e: Env, wasm_hash: BytesN<32>) {
         auth::require_admin(&e);
-        e.deployer().update_current_contract_wasm(wasm_hash)
+        e.deployer().update_current_contract(ContractExecutable::Wasm(wasm_hash))
     }
 
     // Perform token swaps following router instructions
@@ -163,12 +163,16 @@ impl StellarBroker {
             }
         }
 
-        //verify that exactly selling_amount of tokens were deducted from the balance
+        //calculate the selling amount left unspent (some protocols leave dust input unspent)
         selling_balance_after = selling_balance_after
             .checked_add(selling_token_client.balance(&broker))
             .unwrap();
-        let actual_sold = selling_balance_before.checked_sub(selling_balance_after);
-        if actual_sold.unwrap() != selling_amount {
+        let actual_sold = selling_balance_before
+            .checked_sub(selling_balance_after)
+            .unwrap();
+        let unspent = selling_amount.checked_sub(actual_sold).unwrap();
+        //verify that no more than selling_amount of tokens were deducted from the balance
+        if unspent < 0 {
             panic_with_error!(e, error::BrokerError::Misconduct);
         }
 
@@ -184,17 +188,22 @@ impl StellarBroker {
         //transfer bought tokens minus fee to the trader account
         buying_token_client.transfer(&broker, &trader, &bought);
 
+        //refund unspent selling tokens to the trader account
+        if unspent > 0 {
+            selling_token_client.transfer(&broker, &trader, &unspent);
+        }
+
         //verify that fee token balance is correct
         let actual_fee = fee_token_client
             .balance(&broker)
             .checked_sub(fee_balance_before)
             .unwrap();
-        if actual_fee != received_fee || actual_fee < 0 {
+        if actual_fee < received_fee || actual_fee < 0 {
             panic_with_error!(e, error::BrokerError::Misconduct);
         }
 
         //return result as array
-        Vec::from_array(&e, [selling_amount, bought, received_fee])
+        Vec::from_array(&e, [actual_sold, bought, received_fee])
     }
 
     // Withdraw accumulated fees from contract balance

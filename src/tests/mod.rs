@@ -1,5 +1,7 @@
 #![cfg(test)]
 pub mod malicious_tests;
+mod axis_tests;
+mod mock_axis_contract;
 mod mock_aqua_pool_contract;
 mod mock_soroswap_pair_contract;
 mod mock_malicious_lp_contract;

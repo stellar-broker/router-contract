@@ -3,7 +3,7 @@ use crate::tests::swap_test_context::{amount, setup};
 use crate::types::protocol::Protocol;
 use crate::types::route::Route;
 use crate::types::step::PathStep;
-use soroban_sdk::Vec;
+use soroban_sdk::{Bytes, Vec};
 
 #[test]
 fn swap_usdc_eurc() {
@@ -183,6 +183,7 @@ fn swap_fail_invalid_step() {
                 pool: ctx.xlm_eurc_pool.clone(),
                 si: 0,
                 bi: 2,
+                ext: Bytes::new(&ctx.env),
             }]),
         }],
     );
@@ -210,6 +211,7 @@ fn swap_fail_protocol_disabled() {
                 pool: ctx.xlm_eurc_pool.clone(),
                 si: 0,
                 bi: 2,
+                ext: Bytes::new(&ctx.env),
             }]),
         }],
     );

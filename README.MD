@@ -10,6 +10,7 @@ Supported protocols:
 - [Comet](https://github.com/CometDEX/comet-contracts-v1)
 - [Phoenix](https://www.phoenix-hub.io)
 - [SushiSwap](https://www.sushi.com/)
+- [AXIS](https://dex-demo.axis.markets/) (Testnet only)
 
 ## Contract compilation
 
