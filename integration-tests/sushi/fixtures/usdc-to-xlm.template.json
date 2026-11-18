@@ -1,0 +1,1139 @@
+{
+  "schema_version": 2,
+  "ledger_snapshot": {
+    "protocol_version": 29,
+    "sequence_number": 65534393,
+    "timestamp": 1794958007,
+    "network_id": "7ac33997544e3175d266bd022439b22cdb16508c01163f26e5cb2a3e1045a979",
+    "base_reserve": 5000000,
+    "min_persistent_entry_ttl": 2073600,
+    "min_temp_entry_ttl": 17280,
+    "max_entry_ttl": 3110400,
+    "ledger_entries": [
+      {
+        "entry": {
+          "last_modified_ledger_seq": 65287496,
+          "data": {
+            "account": {
+              "account_id": "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+              "balance": "321099354850",
+              "seq_num": "144373126631784461",
+              "num_sub_entries": 6,
+              "inflation_dest": null,
+              "flags": 2,
+              "home_domain": "circle.com",
+              "thresholds": "00020202",
+              "signers": [
+                {
+                  "key": "GAUKFO2NIYEFO773KJZKLPSPYNQ6M7INPEAIQIJCIH7EEVP2KSVQWGH4",
+                  "weight": 1
+                },
+                {
+                  "key": "GAXFRO4MH6FSBJMNECVZJ6R3ZXANI7CFCMVN47IDNRQDHII3J5HTOZGB",
+                  "weight": 1
+                },
+                {
+                  "key": "GB73YPMX5R5673G35HHAXYUNRS4R4QZEUHCRT3OUAMSH2NUM6KT4N3KO",
+                  "weight": 1
+                },
+                {
+                  "key": "GC6ANHZDMCPKU55BUQIJKI3VOYEMETF7Z46HXQRCNONQXPEXQHCVIAFP",
+                  "weight": 1
+                }
+              ],
+              "ext": {
+                "v1": {
+                  "liabilities": {
+                    "buying": "0",
+                    "selling": "0"
+                  },
+                  "ext": {
+                    "v2": {
+                      "num_sponsored": 0,
+                      "num_sponsoring": 0,
+                      "signer_sponsoring_i_ds": [
+                        null,
+                        null,
+                        null,
+                        null
+                      ],
+                      "ext": {
+                        "v3": {
+                          "ext": "v0",
+                          "seq_ledger": 62313360,
+                          "seq_time": "1777311197"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": null
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 65534223,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
+              "key": {
+                "vec": [
+                  {
+                    "symbol": "Balance"
+                  },
+                  {
+                    "address": "CCR2CH4GQVCZHG7CHFVMNANCK45CU5DVKXZIIITDZQAU3CEJZ7RQH2MQ"
+                  }
+                ]
+              },
+              "durability": "persistent",
+              "val": {
+                "map": [
+                  {
+                    "key": {
+                      "symbol": "amount"
+                    },
+                    "val": {
+                      "i128": "26450694755804"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "authorized"
+                    },
+                    "val": {
+                      "bool": true
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "clawback"
+                    },
+                    "val": {
+                      "bool": false
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 66042399
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 50463386,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
+              "key": "ledger_key_contract_instance",
+              "durability": "persistent",
+              "val": {
+                "contract_instance": {
+                  "executable": "stellar_asset",
+                  "storage": [
+                    {
+                      "key": {
+                        "symbol": "METADATA"
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "decimal"
+                            },
+                            "val": {
+                              "u32": 7
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "name"
+                            },
+                            "val": {
+                              "string": "native"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "symbol"
+                            },
+                            "val": {
+                              "string": "native"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "AssetInfo"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "vec": [
+                          {
+                            "symbol": "Native"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68638104
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 62313106,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CCPLJV7AKKFIE4LXFVUWZXDI2HNLEC7U3CQHAMVDLYHQFGMGVTCR4D5W",
+              "key": "ledger_key_contract_instance",
+              "durability": "persistent",
+              "val": {
+                "contract_instance": {
+                  "executable": {
+                    "wasm": "aba81900bc82d24a6f5b66a6fee775bc51543f91dc89e824bd96ffcf3879dba1"
+                  },
+                  "storage": [
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "MintAsset"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "Minters"
+                          },
+                          {
+                            "address": "CAE2G5Z77UP7GYPYGFOWFGW7C7J6I4YP2AFGSADRKQY62SYUFLPNFTXL"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "CCO3242SDS3TV6T27VXBX65FYEI2A4JJTFVOXPZ6LJQANFFNV3NSD575"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "Owner"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "GDTBSE4OQZNASLF2LPSLFZ6ARRWQSDGQUY7EDNKV6YJ5USXJ7SZIINOP"
+                      }
+                    },
+                    {
+                      "key": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "role"
+                            },
+                            "val": {
+                              "symbol": "admin"
+                            }
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "GDUCZFFNH744QQOAHL4QXIDY5S5RCDGRLMOS5EUXY32KSCCY5AFA6JVE"
+                      }
+                    },
+                    {
+                      "key": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "role"
+                            },
+                            "val": {
+                              "symbol": "blocklister"
+                            }
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "GDXXIU24VDETZWRNH5NPRNK5F36MTFIF5MSSIYQ4CMSHAKLKSDUVCN3C"
+                      }
+                    },
+                    {
+                      "key": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "role"
+                            },
+                            "val": {
+                              "symbol": "minter_asset_controller"
+                            }
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "GBPAINTUTPWAHL5ZXC3S2HZA3SN6M5T7CKWWBP2IFLGIJTNRHO73XZPM"
+                      }
+                    },
+                    {
+                      "key": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "role"
+                            },
+                            "val": {
+                              "symbol": "pauser"
+                            }
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "GCTHERMTWQLKMAI5AETB3L2HJ7U27TGCPROAIPA3WIEXMF6Q7RTU2JOK"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68345445
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 65178512,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CCR2CH4GQVCZHG7CHFVMNANCK45CU5DVKXZIIITDZQAU3CEJZ7RQH2MQ",
+              "key": {
+                "vec": [
+                  {
+                    "symbol": "TickBitmap"
+                  },
+                  {
+                    "i32": -2
+                  }
+                ]
+              },
+              "durability": "persistent",
+              "val": {
+                "u256": "765162833030838437961222438072660677274385801648633715415259807744"
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68238450
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 65534223,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CCR2CH4GQVCZHG7CHFVMNANCK45CU5DVKXZIIITDZQAU3CEJZ7RQH2MQ",
+              "key": "ledger_key_contract_instance",
+              "durability": "persistent",
+              "val": {
+                "contract_instance": {
+                  "executable": {
+                    "wasm": "003710b383f9da7d650a7f719a7be479110266427817ebbed61d924505fcd7c7"
+                  },
+                  "storage": [
+                    {
+                      "key": {
+                        "symbol": "bline"
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "balance0"
+                            },
+                            "val": {
+                              "i128": "26450694755804"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "balance1"
+                            },
+                            "val": {
+                              "i128": "1831885514047"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "padmin"
+                      },
+                      "val": {
+                        "address": "GC7RIP4D7UETKBZU7FNUYW5XIR2IPLUQDV2DUTZRKVF6C3P2A5QEDSZI"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "params"
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "factory"
+                            },
+                            "val": {
+                              "address": "CD3KRKGDRVWPXVB3VXLUMQKMX6XZ6Q2H334IVZD4XXNAMKSRVQL5GLYF"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "fee"
+                            },
+                            "val": {
+                              "u32": 3000
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "flash_executor"
+                            },
+                            "val": {
+                              "address": "CDKKPFBNNQETVN4Y2CIU6CQMWCPIZDXDZE76IDSTF7HLQT6Q573PCDTH"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "max_liq_per_tick"
+                            },
+                            "val": {
+                              "u128": "11505743598341114571880798222544994"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "tick_spacing"
+                            },
+                            "val": {
+                              "i32": 60
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "token0"
+                            },
+                            "val": {
+                              "address": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "token1"
+                            },
+                            "val": {
+                              "address": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "pstate"
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "fee_growth_global_0"
+                            },
+                            "val": {
+                              "vec": [
+                                {
+                                  "u256": "19822852941102394650301708559380650499"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "fee_growth_global_1"
+                            },
+                            "val": {
+                              "vec": [
+                                {
+                                  "u256": "3738614810012443352734487796412197598"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "liquidity"
+                            },
+                            "val": {
+                              "u128": "22084520668239"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "protocol_fees"
+                            },
+                            "val": {
+                              "map": [
+                                {
+                                  "key": {
+                                    "symbol": "token0"
+                                  },
+                                  "val": {
+                                    "u128": "528462768847"
+                                  }
+                                },
+                                {
+                                  "key": {
+                                    "symbol": "token1"
+                                  },
+                                  "val": {
+                                    "u128": "94887434830"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "slot0"
+                            },
+                            "val": {
+                              "map": [
+                                {
+                                  "key": {
+                                    "symbol": "sqrt_price_x96"
+                                  },
+                                  "val": {
+                                    "u256": "29757663321084004391909178863"
+                                  }
+                                },
+                                {
+                                  "key": {
+                                    "symbol": "tick"
+                                  },
+                                  "val": {
+                                    "i32": -19586
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "schema_v"
+                      },
+                      "val": {
+                        "u32": 1
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "LastWrittenSlot"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "u128": "29553124"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "LatestOracleObservation"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "initialized"
+                            },
+                            "val": {
+                              "bool": true
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "ledger_sequence"
+                            },
+                            "val": {
+                              "u32": 65534223
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "seconds_per_liq_cum_x128"
+                            },
+                            "val": {
+                              "vec": [
+                                {
+                                  "u256": "33688340221497240598659147341091087929356"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "tick"
+                            },
+                            "val": {
+                              "i32": -19592
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "tick_cumulative"
+                            },
+                            "val": {
+                              "i64": "-388287338006"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "timestamp"
+                            },
+                            "val": {
+                              "u64": "1794957157"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "Metadata"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "checkpoint_count"
+                            },
+                            "val": {
+                              "u32": 9585
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "last_checkpoint_index"
+                            },
+                            "val": {
+                              "u32": 65534134
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "last_observation_ledger"
+                            },
+                            "val": {
+                              "u32": 65534223
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68604273
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 65534223,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+              "key": {
+                "vec": [
+                  {
+                    "symbol": "Balance"
+                  },
+                  {
+                    "address": "CCR2CH4GQVCZHG7CHFVMNANCK45CU5DVKXZIIITDZQAU3CEJZ7RQH2MQ"
+                  }
+                ]
+              },
+              "durability": "persistent",
+              "val": {
+                "map": [
+                  {
+                    "key": {
+                      "symbol": "amount"
+                    },
+                    "val": {
+                      "i128": "1831885514047"
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "authorized"
+                    },
+                    "val": {
+                      "bool": true
+                    }
+                  },
+                  {
+                    "key": {
+                      "symbol": "clawback"
+                    },
+                    "val": {
+                      "bool": false
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 66042399
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 62313360,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+              "key": "ledger_key_contract_instance",
+              "durability": "persistent",
+              "val": {
+                "contract_instance": {
+                  "executable": "stellar_asset",
+                  "storage": [
+                    {
+                      "key": {
+                        "symbol": "METADATA"
+                      },
+                      "val": {
+                        "map": [
+                          {
+                            "key": {
+                              "symbol": "decimal"
+                            },
+                            "val": {
+                              "u32": 7
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "name"
+                            },
+                            "val": {
+                              "string": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+                            }
+                          },
+                          {
+                            "key": {
+                              "symbol": "symbol"
+                            },
+                            "val": {
+                              "string": "USDC"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "Admin"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "CCPLJV7AKKFIE4LXFVUWZXDI2HNLEC7U3CQHAMVDLYHQFGMGVTCR4D5W"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "AssetInfo"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "vec": [
+                          {
+                            "symbol": "AlphaNum4"
+                          },
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "asset_code"
+                                },
+                                "val": {
+                                  "string": "USDC"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "issuer"
+                                },
+                                "val": {
+                                  "bytes": "3b9911380efe988ba0a8900eb1cfe44f366f7dbe946bed077240f7f624df15c5"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68033878
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 63585030,
+          "data": {
+            "contract_data": {
+              "ext": "v0",
+              "contract": "CD3KRKGDRVWPXVB3VXLUMQKMX6XZ6Q2H334IVZD4XXNAMKSRVQL5GLYF",
+              "key": "ledger_key_contract_instance",
+              "durability": "persistent",
+              "val": {
+                "contract_instance": {
+                  "executable": {
+                    "wasm": "9f94c577ea24c2f71cbb0c964c9c9d321e02448d1fe946020afb18974b1c2602"
+                  },
+                  "storage": [
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "ApprovedPoolWasmHash"
+                          },
+                          {
+                            "bytes": "003710b383f9da7d650a7f719a7be479110266427817ebbed61d924505fcd7c7"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "bool": true
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "ApprovedPoolWasmHash"
+                          },
+                          {
+                            "bytes": "48b28121451497952c1c35d58d4556f315a5b468ccde9fcd03f510aefa07c117"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "bool": true
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "DefaultRouter"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "CDMIM23WOUL5CZBKX3GOA3V5R5AMVIMTCP52KCDQORWELAPLJ27WZCHL"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "FeeAmtTickSpacing"
+                          },
+                          {
+                            "u32": 500
+                          }
+                        ]
+                      },
+                      "val": {
+                        "i32": 10
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "FeeAmtTickSpacing"
+                          },
+                          {
+                            "u32": 3000
+                          }
+                        ]
+                      },
+                      "val": {
+                        "i32": 60
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "FeeAmtTickSpacing"
+                          },
+                          {
+                            "u32": 10000
+                          }
+                        ]
+                      },
+                      "val": {
+                        "i32": 200
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "FlashExecutor"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "CDKKPFBNNQETVN4Y2CIU6CQMWCPIZDXDZE76IDSTF7HLQT6Q573PCDTH"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "Owner"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "address": "GC7RIP4D7UETKBZU7FNUYW5XIR2IPLUQDV2DUTZRKVF6C3P2A5QEDSZI"
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "ProtocolFee0"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "u32": 4
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "ProtocolFee1"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "u32": 4
+                      }
+                    },
+                    {
+                      "key": {
+                        "vec": [
+                          {
+                            "symbol": "WasmHash"
+                          }
+                        ]
+                      },
+                      "val": {
+                        "bytes": "003710b383f9da7d650a7f719a7be479110266427817ebbed61d924505fcd7c7"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68589761
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 62898152,
+          "data": {
+            "contract_code": {
+              "ext": {
+                "v1": {
+                  "ext": "v0",
+                  "cost_inputs": {
+                    "ext": "v0",
+                    "n_instructions": 25141,
+                    "n_functions": 248,
+                    "n_globals": 4,
+                    "n_table_entries": 0,
+                    "n_types": 56,
+                    "n_data_segments": 18,
+                    "n_elem_segments": 0,
+                    "n_imports": 62,
+                    "n_exports": 61,
+                    "n_data_segment_bytes": 2524
+                  }
+                }
+              },
+              "hash": "003710b383f9da7d650a7f719a7be479110266427817ebbed61d924505fcd7c7",
+              "code": ""
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68552720
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 61472400,
+          "data": {
+            "contract_code": {
+              "ext": {
+                "v1": {
+                  "ext": "v0",
+                  "cost_inputs": {
+                    "ext": "v0",
+                    "n_instructions": 3123,
+                    "n_functions": 71,
+                    "n_globals": 4,
+                    "n_table_entries": 0,
+                    "n_types": 23,
+                    "n_data_segments": 24,
+                    "n_elem_segments": 0,
+                    "n_imports": 24,
+                    "n_exports": 29,
+                    "n_data_segment_bytes": 1023
+                  }
+                }
+              },
+              "hash": "9f94c577ea24c2f71cbb0c964c9c9d321e02448d1fe946020afb18974b1c2602",
+              "code": ""
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68589761
+      },
+      {
+        "entry": {
+          "last_modified_ledger_seq": 62122165,
+          "data": {
+            "contract_code": {
+              "ext": {
+                "v1": {
+                  "ext": "v0",
+                  "cost_inputs": {
+                    "ext": "v0",
+                    "n_instructions": 8515,
+                    "n_functions": 288,
+                    "n_globals": 4,
+                    "n_table_entries": 7,
+                    "n_types": 35,
+                    "n_data_segments": 1,
+                    "n_elem_segments": 1,
+                    "n_imports": 23,
+                    "n_exports": 31,
+                    "n_data_segment_bytes": 1315
+                  }
+                }
+              },
+              "hash": "aba81900bc82d24a6f5b66a6fee775bc51543f91dc89e824bd96ffcf3879dba1",
+              "code": ""
+            }
+          },
+          "ext": "v0"
+        },
+        "live_until": 68351483
+      }
+    ]
+  },
+  "known_absent": [
+    "AAAAAAAAAAAjiK55QjL/9HkSdWXCavaq6IFaS0SUgp23DJnkDCl91w==",
+    "AAAAAAAAAACwWtjxwMf4ms35Pc4c9VvO13jbTsU9RVoHtaNFMGvUnw==",
+    "AAAABgAAAAEltPzYWa7C+mNIQ4xImzw8EMmLbSG+T9PLMMtolT75dwAAABAAAAABAAAAAgAAAA8AAAAHQmFsYW5jZQAAAAASAAAAAZWCoAoYTyjg/rb7E8QLnleusjXWx3dMKhA2+WSuCnnWAAAAAQ==",
+    "AAAABgAAAAGVgqAKGE8o4P62+xPEC55XrrI11sd3TCoQNvlkrgp51gAAABQAAAAB",
+    "AAAABgAAAAGetNfgUoqCcXctaWzcaNHasgv02KBwMqNeDwKZhqzFHgAAABUOWEdQFwSDCAAAAAA=",
+    "AAAABgAAAAGetNfgUoqCcXctaWzcaNHasgv02KBwMqNeDwKZhqzFHgAAABVM5l8NaFYv7wAAAAA=",
+    "AAAABgAAAAGt785ZruUpaPdgYdSUwlJbdWWfpClqZfSZ7ynlZHfklgAAABAAAAABAAAAAgAAAA8AAAAHQmFsYW5jZQAAAAASAAAAAZWCoAoYTyjg/rb7E8QLnleusjXWx3dMKhA2+WSuCnnWAAAAAQ=="
+  ],
+  "report": {
+    "discovery_rounds": 2,
+    "present_entries": 12,
+    "absent_entries": 7,
+    "final_replay_rpc_reads": 0
+  },
+  "provenance": {
+    "rpc_origin": "https://mainnet.sorobanrpc.com",
+    "network_passphrase": "Public Global Stellar Network ; September 2015",
+    "ledger_sequence": 65534393,
+    "ledger_hash": "d69bdd5a88e547e31fa92eeb7eb703d10945d78b6db54f0d51bbb72b7d5c1701",
+    "protocol_version": 29
+  },
+  "ledger_digest": "d68b443838ce2367d23050df0f93f6d995ce7e1d871ca7dda0bb9584c687b1fa",
+  "inventory_digest": "b71502c61f9a852a7e2223a504596ba87747861e2596cb2d1eaafb348be26c7b",
+  "canonical_digest": "6eda71edf08bd82a297384bf226f00566689df055f3c245be3a29572be89f33b"
+}
